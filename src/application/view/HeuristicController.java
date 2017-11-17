@@ -5,12 +5,10 @@ import java.io.File;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ButtonType;
-
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert.AlertType;
 
 
@@ -22,10 +20,14 @@ public class HeuristicController {
     private ComboBox fileBox;
     @FXML
     private Label dirLabel;
+    @FXML
+    private ListView<File> fileList;
 
     private boolean filesExist;
 
     private File[] graphFiles;
+
+    private ObservableList<File> obslist;
 
 
 
@@ -64,6 +66,10 @@ public class HeuristicController {
                 dirLabel.setText("Graph Count: 0");
             }
         }
+    }
+
+    private void loadFileList(){
+        obslist = FXCollections.observableArrayList();
     }
 
     @FXML
