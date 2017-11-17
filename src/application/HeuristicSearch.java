@@ -31,6 +31,7 @@ public class HeuristicSearch extends Application {
         primaryStage.setTitle("Heuristic Search - Andrew Wang & Mauricio Alvarez");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
     }
