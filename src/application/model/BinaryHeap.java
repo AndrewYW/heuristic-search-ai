@@ -1,7 +1,5 @@
 package application.model;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
