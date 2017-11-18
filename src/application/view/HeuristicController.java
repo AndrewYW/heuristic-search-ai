@@ -167,7 +167,7 @@ public class HeuristicController {
                         pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                         break;
                     case 'b':       //Hard traverse highway
-                        pane.setStyle("-fx-background-color: darkblue");
+                        pane.setStyle("-fx-background-color: blueviolet");
                         pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                         break;
                     default:
