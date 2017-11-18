@@ -117,23 +117,22 @@ public class HeuristicController {
     @FXML
     private void handleDelete(){
         /** Button to delete selected file. **/
-        String filePath = "src/application/data/" + fileBox.getValue();
+        String filePath = "src/application/data/" + fileBox.getSelectionModel().getSelectedItem().toString();
     }
 
     @FXML
     private void loadGraph(){
         /** Button to load graph onto screen. **/
-        String filePath = "src/application/data/" + fileBox.getValue();
+        String filePath = "src/application/data/" + fileBox.getSelectionModel().getSelectedItem().toString();
         File file = new File(filePath);
 
         currentGraph = loadNodeArray(file);
-
-
     }
 
     @FXML
     private void solveGraph(){
         /** Button to solve the loaded graph. **/
+        String algo =algsBox.getSelectionModel().getSelectedItem().toString();
     }
 
     private Node[][] loadNodeArray(File file){
