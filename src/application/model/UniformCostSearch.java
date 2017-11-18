@@ -3,6 +3,7 @@ package application.model;
 import java.io.*;
 import java.util.*;
 
+/*
 public class UniformCostSearch {
     public int A_Row, A_Col, B_Row, B_Col, size;
     public Node start;
@@ -129,3 +130,4 @@ public class UniformCostSearch {
         return null;														// Node not found, return nothing
     }
 }
+*/

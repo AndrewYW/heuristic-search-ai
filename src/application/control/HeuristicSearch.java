@@ -1,4 +1,4 @@
-package application;
+package application.control;
 
 import application.view.HeuristicController;
 import javafx.application.Application;
@@ -11,17 +11,8 @@ public class HeuristicSearch extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        /**
-         * FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/Heuristic.fxml"));
-        AnchorPane root = loader.load();
-        primaryStage.setTitle("Heuristic Search - Andrew Wang & Mauricio Alvarez");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
-         **/
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Heuristic.fxml"));
-        //loader.setLocation(getClass().getResource("view/Heuristic.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Heuristic.fxml"));
         AnchorPane rootLayout = loader.load();
 
         HeuristicController hControl = loader.getController();

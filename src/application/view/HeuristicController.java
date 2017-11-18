@@ -1,18 +1,9 @@
 package application.view;
 
-import application.model.Node;
+import application.model.GraphFile;
 import java.io.File;
 
-import java.util.Scanner;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.List;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
-
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -29,29 +20,59 @@ public class HeuristicController {
     @FXML
     private ComboBox algsBox;
     @FXML
-    private ComboBox fileBox;
-    @FXML
     private Label dirLabel;
     @FXML
-    private ListView<File> fileList;
+    private ListView<GraphFile> fileList;
     @FXML
     private GridPane graph;
+    @FXML
+    private Label c1;
+    @FXML
+    private Label c2;
+    @FXML
+    private Label c3;
+    @FXML
+    private Label c4;
+    @FXML
+    private Label c5;
+    @FXML
+    private Label c6;
+    @FXML
+    private Label c7;
+    @FXML
+    private Label c8;
+    @FXML
+    private Label c9;
+    @FXML
+    private Label c10;
 
-    private boolean filesExist;
-
-    private File[] graphFiles;
-
-    private ObservableList<File> obslist;
-
-    private Node[][] currentGraph = new Node[120][160];
-    private String[] coordinates = new String[10];
-
-
+    private File[] sysFiles;
 
     public void start(Stage primaryStage){
         setAlgBox();
-        loadFileBox();
+        ObservableList<GraphFile> obslist = FXCollections.observableArrayList();
+        File dir = new File("src/application/data");
 
+        if(dir.exists()){
+            if( dir.list().length > 0 ){
+                System.out.println("reacho");
+                sysFiles = dir.listFiles(); //Set global file list for other methods.
+                for(File file: sysFiles){
+                    obslist.add(new GraphFile(file));
+                }
+            }
+        }
+
+        fileList.setItems(obslist);
+        if(!obslist.isEmpty()){
+            fileList.getSelectionModel().selectFirst();
+        }
+
+        showFileDetails();
+
+        //Set listener for selection changes.
+        fileList.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldValue, newValue) -> showFileDetails());
     }
 
     private void setAlgBox(){
@@ -64,38 +85,10 @@ public class HeuristicController {
         algsBox.setValue("Uniform-cost");
     }
 
-    private void loadFileBox(){
-        File dir = new File("src/application/data");
-
-        if(dir.exists()){
-            if(dir.list().length > 0){
-                String label = "Graph count: " + Integer.toString(dir.list().length);
-                filesExist = true;
-                dirLabel.setText(label);
-                //Load data files into box
-                graphFiles = dir.listFiles();
-                for (File file : graphFiles){
-                    fileBox.getItems().add(file.getName());
-                }
-            }
-            else{
-                filesExist = false;
-                dirLabel.setText("Graph Count: 0");
-            }
-        }
-    }
-
-    /** TODO
-     * Convert File combo box into observable list for easier viewing.
-     */
-    private void loadFileList(){
-        obslist = FXCollections.observableArrayList();
-    }
-
     @FXML
     private void handleGenerate(){
         /** Button method to generate random graphs. **/
-        if(filesExist){
+        if(sysFiles.length > 0){
             //Files already exist, asks for confirmation
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("WARNING");
@@ -103,95 +96,106 @@ public class HeuristicController {
             alert.setContentText("Creating new graphs will erase old files. Confirm to continue.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
-                // ... user chose OK
+                /**
+                 * User confirms,
+                 * File list is cleared?
+                 * Generate new files
+                 */
             } else {
                 // ... user chose CANCEL or closed the dialog
+                return;
             }
 
         }
         else{
-            //Free to generate files
+            //Free to generate files, no need to clear
         }
     }
 
     @FXML
     private void handleDelete(){
         /** Button to delete selected file. **/
-        String filePath = "src/application/data/" + fileBox.getSelectionModel().getSelectedItem().toString();
+
     }
 
     @FXML
     private void loadGraph(){
         /** Button to load graph onto screen. **/
-        String filePath = "src/application/data/" + fileBox.getSelectionModel().getSelectedItem().toString();
-        File file = new File(filePath);
-
-        currentGraph = loadNodeArray(file);
+        showGraph();
     }
 
     @FXML
     private void solveGraph(){
-        /** Button to solve the loaded graph. **/
+        /** Button to solve the loaded graph.
+         * TODO @Mauricio!!!
+         * **/
         String algo =algsBox.getSelectionModel().getSelectedItem().toString();
+        GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
     }
 
-    private Node[][] loadNodeArray(File file){
-        /* Helper method to create a 2d array of nodes given filepath.
-           Strips file of first 10 lines to place into coordinates array, then converts into 2d char array and goes from there.
-           In addition, it creates the graph to be shown in the anchorpane.
+
+    private void showGraph(){
+        /**
+         * Helper method to load the graph onto the GUI screen.
+         * Invoked by the loadGraph button.
          */
-        try {
-            Scanner sc = new Scanner(file);
+        if(fileList.getSelectionModel().isEmpty()){
+            return;
+        }
+        GraphFile gfile = fileList.getSelectionModel().getSelectedItem();
 
-            int c = 0;
-
-            //Store the first 10 lines of the file into the coordinates array.
-            while( c < 10 ){
-                coordinates[c] = sc.nextLine();
-                System.out.println("Coordinates[" + c + "]: " + coordinates[c]);
-                c++;
-            }
-
-            Node[][] result = new Node[120][160];
-            //
-            for(int row = 0; row < 120; row++){
-                char[] line = sc.nextLine().toCharArray();
-                for(int col = 0; col < 160; col++){
-
-                    //Create node and input to node array 'currentGraph'
-                    Node node = new Node(row, col, line[col]);
-                    result[row][col] = node;
-
-                    //Create Panes for graph.
-                    Pane pane = new Pane();
-                    switch(node.type){
-                        case '0':       //Blocked Cell
-                            pane.setStyle("-fx-background-color: black");
-                            break;
-                        case '1':       //Regular unblocked
-                            pane.setStyle("-fx-background-color: ghostwhite");
-                            break;
-                        case '2':       //Hard to traverse
-                            pane.setStyle("-fx-background-color: dimgray");
-                            break;
-                        case 'a':       //Regular highway
-                            pane.setStyle("-fx-background-color: cyan");
-                            break;
-                        case 'b':       //Hard traverse highway
-                            pane.setStyle("-fx-background-color: darkblue");
-                            break;
-                        default:
-                            System.out.println("Error parsing char: not 0, 1, 2, a, or b");
-                    }
-                    graph.add(pane, col, row);
+        for(int row = 0; row < 120; row++){
+            for(int col = 0; col < 160; col++){
+                System.out.println("row: " + Integer.toString(row) + ", col: " + Integer.toString(col));
+                Pane pane = new Pane();
+                System.out.println("Case: " + gfile.graph[row][col].type);
+                switch(gfile.graph[row][col].type){     //Node.type = char from file.
+                    case '0':       //Blocked Cell
+                        pane.setStyle("-fx-background-color: black");
+                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        break;
+                    case '1':       //Regular unblocked
+                        pane.setStyle("-fx-background-color: ghostwhite");
+                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        break;
+                    case '2':       //Hard to traverse
+                        pane.setStyle("-fx-background-color: dimgray");
+                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        break;
+                    case 'a':       //Regular highway
+                        pane.setStyle("-fx-background-color: cyan");
+                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        break;
+                    case 'b':       //Hard traverse highway
+                        pane.setStyle("-fx-background-color: darkblue");
+                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        break;
+                    default:
+                        System.out.println("Error parsing char: not 0, 1, 2, a, or b");
                 }
+                graph.add(pane, col, row);
             }
+        }
+    }
 
-        }catch(IOException e){
-            e.printStackTrace();
+    private void showFileDetails(){
+        if(fileList.getSelectionModel().isEmpty()){
+            return;
         }
 
-        return null;
+        GraphFile gfile = fileList.getSelectionModel().getSelectedItem();
+        /**
+         * Display fields onto GUI
+         */
+        c1.setText(gfile.getCoords(1));
+        c2.setText(gfile.getCoords(2));
+        c3.setText(gfile.getCoords(3));
+        c4.setText(gfile.getCoords(4));
+        c5.setText(gfile.getCoords(5));
+        c6.setText(gfile.getCoords(6));
+        c7.setText(gfile.getCoords(7));
+        c8.setText(gfile.getCoords(8));
+        c9.setText(gfile.getCoords(9));
+        c10.setText(gfile.getCoords(10));
     }
-
 }
