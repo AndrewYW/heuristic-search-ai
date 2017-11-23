@@ -1,12 +1,14 @@
 package application.view;
 
 import application.model.GraphFile;
+import application.model.Node;
 import java.io.File;
 
 import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -19,8 +21,6 @@ public class HeuristicController {
 
     @FXML
     private ComboBox algsBox;
-    @FXML
-    private Label dirLabel;
     @FXML
     private ListView<GraphFile> fileList;
     @FXML
@@ -131,6 +131,7 @@ public class HeuristicController {
          * **/
         String algo =algsBox.getSelectionModel().getSelectedItem().toString();
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
+
     }
 
 
@@ -149,26 +150,25 @@ public class HeuristicController {
                 System.out.println("row: " + Integer.toString(row) + ", col: " + Integer.toString(col));
                 Pane pane = new Pane();
                 System.out.println("Case: " + gfile.graph[row][col].type);
+                pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                pane.setOnMouseClicked((MouseEvent e) -> showNodeDetails(pane));
+
                 switch(gfile.graph[row][col].type){     //Node.type = char from file.
                     case '0':       //Blocked Cell
-                        pane.setStyle("-fx-background-color: black");
-                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        pane.setStyle("-fx-background-color: darkslategrey");
                         break;
                     case '1':       //Regular unblocked
                         pane.setStyle("-fx-background-color: ghostwhite");
-                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                         break;
                     case '2':       //Hard to traverse
                         pane.setStyle("-fx-background-color: dimgray");
-                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                         break;
                     case 'a':       //Regular highway
                         pane.setStyle("-fx-background-color: cyan");
-                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                         break;
                     case 'b':       //Hard traverse highway
-                        pane.setStyle("-fx-background-color: blueviolet");
-                        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                        pane.setStyle("-fx-background-color: cyan");
+
                         break;
                     default:
                         System.out.println("Error parsing char: not 0, 1, 2, a, or b");
@@ -176,6 +176,13 @@ public class HeuristicController {
                 graph.add(pane, col, row);
             }
         }
+    }
+
+    private void showNodeDetails(Pane pane){
+        /* Show the various parameters of the node at the position*/
+        int row = graph.getRowIndex(pane);
+        int col = graph.getColumnIndex(pane);
+        System.out.println("Row: " + row + ", col: " + col);
     }
 
     private void showFileDetails(){

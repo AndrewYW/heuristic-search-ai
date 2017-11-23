@@ -97,6 +97,14 @@ public class GraphFile {
         }
         return res.toString();
     }
+
+    public Node getStart(){
+        return this.graph[this.start[0]][this.start[1]];
+    }
+
+    public Node getGoal(){
+        return this.graph[this.goal[0]][this.goal[1]];
+    }
     public String toString(){
         /** toString override for the observableList. Trims extensions from filename. **/
         String filename = this.file.getName();
