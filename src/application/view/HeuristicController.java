@@ -1,10 +1,14 @@
 package application.view;
 
+import application.model.FileGenerator;
 import application.model.GraphFile;
 import application.model.Node;
 import java.io.File;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -45,30 +49,17 @@ public class HeuristicController {
     private Label c9;
     @FXML
     private Label c10;
+    @FXML
+    private Label statusLabel;
 
-    private File[] sysFiles;
+    private File[] sysFiles = null;
+    private ObservableList<GraphFile> obslist;
 
     public void start(Stage primaryStage){
         setAlgBox();
-        ObservableList<GraphFile> obslist = FXCollections.observableArrayList();
-        File dir = new File("src/application/data");
+        obslist = FXCollections.observableArrayList();
 
-        if(dir.exists()){
-            if( dir.list().length > 0 ){
-                System.out.println("reacho");
-                sysFiles = dir.listFiles(); //Set global file list for other methods.
-                for(File file: sysFiles){
-                    obslist.add(new GraphFile(file));
-                }
-            }
-        }
-
-        fileList.setItems(obslist);
-        if(!obslist.isEmpty()){
-            fileList.getSelectionModel().selectFirst();
-        }
-
-        showFileDetails();
+        loadDirectory();
 
         //Set listener for selection changes.
         fileList.getSelectionModel().selectedItemProperty().addListener(
@@ -86,9 +77,9 @@ public class HeuristicController {
     }
 
     @FXML
-    private void handleGenerate(){
+    private void generateButton(){
         /** Button method to generate random graphs. **/
-        if(sysFiles.length > 0){
+        if(sysFiles != null && sysFiles.length > 0){
             //Files already exist, asks for confirmation
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("WARNING");
@@ -101,14 +92,19 @@ public class HeuristicController {
                  * File list is cleared?
                  * Generate new files
                  */
+                for(File file : sysFiles){
+                    file.delete();
+                }
+                generateFiles();
             } else {
                 // ... user chose CANCEL or closed the dialog
-                return;
             }
 
         }
         else{
             //Free to generate files, no need to clear
+            sysFiles = new File[50];
+            generateFiles();
         }
     }
 
@@ -134,12 +130,12 @@ public class HeuristicController {
 
     }
 
-
+    /**
+     * Helper method to load the graph onto the GUI screen.
+     * Invoked by the loadGraph button.
+     */
     private void showGraph(){
-        /**
-         * Helper method to load the graph onto the GUI screen.
-         * Invoked by the loadGraph button.
-         */
+
         if(fileList.getSelectionModel().isEmpty()){
             return;
         }
@@ -147,9 +143,9 @@ public class HeuristicController {
 
         for(int row = 0; row < 120; row++){
             for(int col = 0; col < 160; col++){
-                System.out.println("row: " + Integer.toString(row) + ", col: " + Integer.toString(col));
+                //System.out.println("row: " + Integer.toString(row) + ", col: " + Integer.toString(col));
                 Pane pane = new Pane();
-                System.out.println("Case: " + gfile.graph[row][col].type);
+                //System.out.println("Case: " + gfile.graph[row][col].type);
                 pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 pane.setOnMouseClicked((MouseEvent e) -> showNodeDetails(pane));
 
@@ -158,10 +154,10 @@ public class HeuristicController {
                         pane.setStyle("-fx-background-color: darkslategrey");
                         break;
                     case '1':       //Regular unblocked
-                        pane.setStyle("-fx-background-color: ghostwhite");
+                        pane.setStyle("-fx-background-color: lightgray");
                         break;
                     case '2':       //Hard to traverse
-                        pane.setStyle("-fx-background-color: dimgray");
+                        pane.setStyle("-fx-background-color: slategrey");
                         break;
                     case 'a':       //Regular highway
                         pane.setStyle("-fx-background-color: cyan");
@@ -178,6 +174,11 @@ public class HeuristicController {
         }
     }
 
+    /**
+     * Helper method to load cell details when clicked.
+     * Since the 2D node array and UI are unlinked, the row and column are necessary to find the right node.
+     * @param pane The selected UI pane in the Gridpane.
+     */
     private void showNodeDetails(Pane pane){
         /* Show the various parameters of the node at the position*/
         int row = graph.getRowIndex(pane);
@@ -204,5 +205,51 @@ public class HeuristicController {
         c8.setText(gfile.getCoords(8));
         c9.setText(gfile.getCoords(9));
         c10.setText(gfile.getCoords(10));
+    }
+
+    /**
+     * Helper method to generate files.
+     * 50 files are generated, 5 different maps with 10 different start-goal coordinates.
+     */
+    private void generateFiles() {
+        obslist.clear();
+        FileGenerator filegen = null;
+        for (int i = 0; i < 5; i++) {
+            filegen = new FileGenerator();
+            statusLabel.setText("Setting hard blocks..");
+            filegen.setHards();
+            statusLabel.setText("Setting blocked cells..");
+            filegen.setBlocked();
+
+            filegen.setNodes();
+            filegen.writeFile(i);
+        }
+
+        loadDirectory();
+
+    }
+
+    private void loadDirectory(){
+        File dir = new File("src/application/data");
+
+        if(dir.exists()){
+            if( dir.list().length > 0 ){
+                sysFiles = dir.listFiles(); //Set global file list for other methods.
+                for(File file: sysFiles){
+                    try {
+                        obslist.add(new GraphFile(file));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        fileList.setItems(obslist);
+        if(!obslist.isEmpty()){
+            fileList.getSelectionModel().selectFirst();
+        }
+
+        showFileDetails();
     }
 }
