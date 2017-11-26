@@ -2,13 +2,9 @@ package application.view;
 
 import application.model.FileGenerator;
 import application.model.GraphFile;
-import application.model.Node;
 import java.io.File;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.Random;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,7 +16,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert.AlertType;
 
-
+/**
+ * The Controller for the FXML file.
+ * @author Andrew Wang
+ * @author Mauricio Alvarez
+ */
 public class HeuristicController {
 
     @FXML
@@ -66,6 +66,9 @@ public class HeuristicController {
                 (obs, oldValue, newValue) -> showFileDetails());
     }
 
+    /**
+     * Helper method to load the algorithms Combobox.
+     */
     private void setAlgBox(){
         algsBox.getItems().addAll(
                 "Uniform-cost",
@@ -76,6 +79,10 @@ public class HeuristicController {
         algsBox.setValue("Uniform-cost");
     }
 
+    /**
+     * Button to create a set of 50 files. 5 different maps, 10 different start-goal pairs each.
+     * Throws an alert, because the file deletes other preloaded files.
+     */
     @FXML
     private void generateButton(){
         /** Button method to generate random graphs. **/
@@ -108,23 +115,28 @@ public class HeuristicController {
         }
     }
 
+    /**
+     * Button to delete a selected file. Added because I can.
+     */
     @FXML
     private void handleDelete(){
-        /** Button to delete selected file. **/
 
     }
 
+    /**
+     * Button to load the graph onto the screen.
+     * Invokes the showGraph() helper method.
+     */
     @FXML
     private void loadGraph(){
-        /** Button to load graph onto screen. **/
         showGraph();
     }
 
+    /**
+     * Button to actually solve the selected file with selected algorithm.
+     */
     @FXML
     private void solveGraph(){
-        /** Button to solve the loaded graph.
-         * TODO @Mauricio!!!
-         * **/
         String algo =algsBox.getSelectionModel().getSelectedItem().toString();
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
 
@@ -149,7 +161,7 @@ public class HeuristicController {
                 pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 pane.setOnMouseClicked((MouseEvent e) -> showNodeDetails(pane));
 
-                switch(gfile.graph[row][col].type){     //Node.type = char from file.
+                switch(gfile.graph[row][col].getType()){     //Node.type = char from file.
                     case '0':       //Blocked Cell
                         pane.setStyle("-fx-background-color: darkslategrey");
                         break;
@@ -177,6 +189,7 @@ public class HeuristicController {
     /**
      * Helper method to load cell details when clicked.
      * Since the 2D node array and UI are unlinked, the row and column are necessary to find the right node.
+     * @// TODO: 11/26/17   Need to finish
      * @param pane The selected UI pane in the Gridpane.
      */
     private void showNodeDetails(Pane pane){
@@ -186,6 +199,9 @@ public class HeuristicController {
         System.out.println("Row: " + row + ", col: " + col);
     }
 
+    /**
+     * Method to show the details of a loaded file.
+     */
     private void showFileDetails(){
         if(fileList.getSelectionModel().isEmpty()){
             return;
@@ -218,9 +234,9 @@ public class HeuristicController {
             filegen = new FileGenerator();
             statusLabel.setText("Setting hard blocks..");
             filegen.setHards();
+            filegen.setHighways();
             statusLabel.setText("Setting blocked cells..");
             filegen.setBlocked();
-
             filegen.setNodes();
             filegen.writeFile(i);
         }
@@ -229,6 +245,9 @@ public class HeuristicController {
 
     }
 
+    /**
+     * Helper method to load the directory into the ListView.
+     */
     private void loadDirectory(){
         File dir = new File("src/application/data");
 

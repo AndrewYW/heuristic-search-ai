@@ -5,19 +5,46 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.lang.StringBuilder;
 
+/**
+ * GraphFile class, contains information loaded from each file.
+ * Methods present to retrieve information.
+ * @author Andrew Wang
+ */
 public class GraphFile {
+    /**
+     * File associated with GraphFile.
+     */
     public File file;
+    /**
+     * 2d int array, holding the coordinates of each hard to traverse center.
+     */
     public int[][] coords = new int[8][2];
-    public int[] start = new int[2];   //Start coordinates: [0] is row, [1] is col
-    public int[] goal = new int[2];    //Goal coordinates
-    public Node[][] graph = new Node[120][160]; //The 2d node array associated with the file
+    /**
+     * Int array, holding the start coordinates. [0] is row, [1] is column.
+     */
+    public int[] start = new int[2];
+    /**
+     * Int array, holding the goal coordinates. [0] is row, [1] is column.
+     */
+    public int[] goal = new int[2];
+    /**
+     * 2d Node array, a holder of nodes created from the given file.
+     */
+    public Node[][] graph = new Node[120][160];
 
+    /**
+     * Default constructor.
+     * @param file File to load data from into a GraphFile.
+     */
     public GraphFile(File file){
-        /*Get all data from file to generate the GraphFile. */
         this.file = file;
         initialize();
     }
 
+    /**
+     * Helper method to initialize the GraphFile.
+     * Reads line by line through a file, and fills out fields.
+     */
     public void initialize(){
         try{
             Scanner sc = new Scanner(this.file);
@@ -59,6 +86,14 @@ public class GraphFile {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Method used for loading Textlabel data for hard to traverse coordinates.
+     * Utilizes a StringBuilder to construct a string in the form "(row, col)".
+     * Uses a switch statement to specify which TextLabel to set.
+     * @param pos The specific textlabel to fill.
+     * @return    String to fill the correct textlabel with.
+     */
     public String getCoords(int pos){
         StringBuilder res = new StringBuilder().append("(");
         switch(pos){
@@ -98,15 +133,26 @@ public class GraphFile {
         return res.toString();
     }
 
-    public Node getStart(){
+    /**
+     * Method to get the start coordinates.
+     * @return Node that the start position is on.
+     */
+    public Node getStartNode(){
         return this.graph[this.start[0]][this.start[1]];
     }
 
-    public Node getGoal(){
-        return this.graph[this.goal[0]][this.goal[1]];
-    }
+    /**
+     *Method to get the goal coordinate node.
+     * @return Node that the goal position is on.
+     */
+    public Node getGoalNode(){ return this.graph[this.goal[0]][this.goal[1]]; }
+
+    /**
+     * toString override for the observableList. Trims extensions from filename.
+     * @return String of filename, minus the extension.
+     */
+    @Override
     public String toString(){
-        /** toString override for the observableList. Trims extensions from filename. **/
         String filename = this.file.getName();
         if (filename.indexOf(".") > 0){
             filename = filename.substring(0, filename.lastIndexOf("."));

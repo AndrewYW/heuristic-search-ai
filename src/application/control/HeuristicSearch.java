@@ -7,6 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * The main class file.
+ * @author Andrew Wang
+ * @author Mauricio Alvarez
+ */
 public class HeuristicSearch extends Application {
 
     @Override
