@@ -1,5 +1,5 @@
 package application.model;
-
+/**
 public class Fringe<Node extends Comparable<Node>> {
 
     private static final int d = 2;
@@ -7,7 +7,8 @@ public class Fringe<Node extends Comparable<Node>> {
     private Node[] heap;
 
     public Fringe(){
-
+        size = 0;
+        heap = new Node[2];
     }
 
     public boolean insert(Node s, Float x){
@@ -21,3 +22,4 @@ public class Fringe<Node extends Comparable<Node>> {
         return null;
     }
 }
+**/

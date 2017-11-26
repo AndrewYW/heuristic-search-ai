@@ -53,6 +53,10 @@ public class HeuristicController {
     private Label c10;
     @FXML
     private Label statusLabel;
+    @FXML
+    private TextField hField;
+    @FXML
+    private TextField wField;
 
     private File[] sysFiles = null;
     private ObservableList<GraphFile> obslist;
@@ -142,7 +146,7 @@ public class HeuristicController {
 
         for(int row = 0; row < 120; row++){
             for(int col = 0; col < 160; col++){
-                nodes[row][col].getChildren(nodes);
+                nodes[row][col].setChildren(nodes);
             }
         }
     }
@@ -155,16 +159,18 @@ public class HeuristicController {
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
         Node start = gfile.graph[gfile.start[0]][gfile.start[1]];
         Node goal = gfile.graph[gfile.goal[0]][gfile.goal[1]];
-        float heuristic = 0;
+        float heuristic = Float.parseFloat(hField.getText());
 
         if(alg.equals("Sequential Heuristic A*")){
 
         } else if(alg.equals("Uniform-cost")){
-            AStar algorithm = new AStar(start, goal, 0);
+            AStar algorithm = new AStar(start, goal, heuristic, 0);
         } else if(alg.equals("A* search")){
-            AStar algorithm = new AStar(start, goal, 1);
+            AStar algorithm = new AStar(start, goal, heuristic, 1);
         } else {
-            AStar algorithm = new AStar(start, goal, heuristic);
+            wField.setEditable(true);
+            float weight = Float.parseFloat(wField.getText());
+            AStar algorithm = new AStar(start, goal, heuristic, weight);
         }
     }
 

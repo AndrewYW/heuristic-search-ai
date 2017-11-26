@@ -17,15 +17,13 @@ public class Node implements Comparable<Node>{
     private float hVal;
     private char type;
     private Node parent;
-    private List<Node> children;
+    private ArrayList<Node> children;
 
 
     public Node(int row, int col, char type){
         this.row = row;
         this.col = col;
         this.type = type;
-        this.parent = null;
-        this.gVal = Float.MAX_VALUE;
         this.children = new ArrayList<>();
     }
 
@@ -40,17 +38,40 @@ public class Node implements Comparable<Node>{
         return this.type;
     }
 
-    public float getF(){
+    public float getfVal(){
         return this.fVal;
     }
 
-    public float getC(Node n){
+    public float getgVal() { return this.gVal; }
+
+    public float gethVal() { return this.hVal; }
+
+    /**
+     * Method to find the cost of travel between two nodes.
+     * @TODO
+     * @param n
+     * @return
+     */
+    public float getCost(Node n){
         char t1 = this.type;
         char t2 = n.getType();
         return 0;
     }
 
-    public void getChildren(Node[][] graph){
+    public ArrayList<Node> getChildren() { return this.children; }
+
+    public void setfVal(float value){
+        this.fVal = value;
+    }
+
+    public void setgVal(float value){
+        this.gVal = value;
+    }
+
+    public void setParent(Node parent){
+        this.parent = parent;
+    }
+    public void setChildren(Node[][] graph){
         for(int i = -1; i < 2; i++){
             for(int j = -1; j < 2; j++){
                 if( (i != row) && (j != col) ){
@@ -63,9 +84,9 @@ public class Node implements Comparable<Node>{
 
     @Override
     public int compareTo(Node n){
-        if(this.getF() < n.getF())
+        if(this.getfVal() < n.getfVal())
             return -1;
-        if(this.getF() > n.getF())
+        if(this.getfVal() > n.getfVal())
             return 1;
         return 0;
     }
