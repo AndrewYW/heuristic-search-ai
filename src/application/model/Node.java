@@ -1,5 +1,8 @@
 package application.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Node class, the main comparison class used for the A* algorithms.
  * Implements the Comparable interface.
@@ -14,6 +17,7 @@ public class Node implements Comparable<Node>{
     private float hVal;
     private char type;
     private Node parent;
+    private List<Node> children;
 
 
     public Node(int row, int col, char type){
@@ -22,6 +26,7 @@ public class Node implements Comparable<Node>{
         this.type = type;
         this.parent = null;
         this.gVal = Float.MAX_VALUE;
+        this.children = new ArrayList<>();
     }
 
     public int getRow(){
@@ -37,6 +42,23 @@ public class Node implements Comparable<Node>{
 
     public float getF(){
         return this.fVal;
+    }
+
+    public float getC(Node n){
+        char t1 = this.type;
+        char t2 = n.getType();
+        return 0;
+    }
+
+    public void getChildren(Node[][] graph){
+        for(int i = -1; i < 2; i++){
+            for(int j = -1; j < 2; j++){
+                if( (i != row) && (j != col) ){
+                    if(graph[row+i][col+j].getType() != '0')
+                        children.add(graph[row+i][col+j]);
+                }
+            }
+        }
     }
 
     @Override

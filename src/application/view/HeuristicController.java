@@ -1,11 +1,13 @@
 package application.view;
 
+import application.model.AStar;
 import application.model.FileGenerator;
 import application.model.GraphFile;
 import java.io.File;
 
 import java.util.Optional;
 
+import application.model.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -54,6 +56,8 @@ public class HeuristicController {
 
     private File[] sysFiles = null;
     private ObservableList<GraphFile> obslist;
+
+    private Node[][] nodes;
 
     public void start(Stage primaryStage){
         setAlgBox();
@@ -130,16 +134,38 @@ public class HeuristicController {
     @FXML
     private void loadGraph(){
         showGraph();
+        setChildren();
     }
 
+    private void setChildren(){
+        nodes = fileList.getSelectionModel().getSelectedItem().graph;
+
+        for(int row = 0; row < 120; row++){
+            for(int col = 0; col < 160; col++){
+                nodes[row][col].getChildren(nodes);
+            }
+        }
+    }
     /**
      * Button to actually solve the selected file with selected algorithm.
      */
     @FXML
     private void solveGraph(){
-        String algo =algsBox.getSelectionModel().getSelectedItem().toString();
+        String alg =algsBox.getSelectionModel().getSelectedItem().toString();
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
+        Node start = gfile.graph[gfile.start[0]][gfile.start[1]];
+        Node goal = gfile.graph[gfile.goal[0]][gfile.goal[1]];
+        float heuristic = 0;
 
+        if(alg.equals("Sequential Heuristic A*")){
+
+        } else if(alg.equals("Uniform-cost")){
+            AStar algorithm = new AStar(start, goal, 0);
+        } else if(alg.equals("A* search")){
+            AStar algorithm = new AStar(start, goal, 1);
+        } else {
+            AStar algorithm = new AStar(start, goal, heuristic);
+        }
     }
 
     /**
