@@ -179,10 +179,16 @@ public class Node implements Comparable<Node>{
     public void sethVal(Node goal, int heuristic){
         switch (heuristic){
             case 0:     //Euclidean distance
+                System.out.println("Euclidean distance");
                 euclidean(goal);
                 break;
             case 1:     //Manhattan
+                System.out.println("Manhattan distance");
                 manhattan(goal);
+                break;
+            case 2:
+            case 3:
+                diagonal(goal, heuristic);
                 break;
         }
         int row1 = this.row;
@@ -271,5 +277,26 @@ public class Node implements Comparable<Node>{
         int y = Math.abs(col1-col2);
 
         this.hVal = x+y;
+    }
+
+    private void diagonal(Node node, int d){
+        double cost;
+        if(d == 2) {          //Chebyshev distance
+            System.out.println("Chebyshev distance");
+            cost = 1;
+        }
+        else {                //Octile distance
+            System.out.println("Octile distance");
+            cost = Math.sqrt(2);
+        }
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = node.getRow();
+        int col2 = node.getCol();
+
+        int x = Math.abs(row1-row2);
+        int y = Math.abs(col1-col2);
+
+        this.hVal = (float)((x+y) + ((cost - 2) * (Math.min(x,y))));
     }
 }

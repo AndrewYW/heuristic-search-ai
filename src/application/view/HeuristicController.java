@@ -106,7 +106,10 @@ public class HeuristicController {
     private void setHBox(){
         hBox.getItems().addAll(
                 "Euclidean distance",
-                            "Manhattan distance");
+                            "Manhattan distance",
+                            "Chebyshev distance",
+                            "Octile distance"
+                );
 
         hBox.setValue("Euclidean distance");
     }

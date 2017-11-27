@@ -95,7 +95,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <GridPane layoutX="20.0" layoutY="749.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                  <GridPane layoutX="20.0" layoutY="749.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
