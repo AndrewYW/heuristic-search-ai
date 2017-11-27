@@ -156,6 +156,7 @@ public class HeuristicController {
      */
     @FXML
     private void solveGraph(){
+        showGraph();
         String alg =algsBox.getSelectionModel().getSelectedItem().toString();
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
         Node start = gfile.graph[gfile.start[0]][gfile.start[1]];
