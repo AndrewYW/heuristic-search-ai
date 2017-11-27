@@ -176,7 +176,15 @@ public class Node implements Comparable<Node>{
         this.gVal = value;
     }
 
-    public void sethVal(Node goal){
+    public void sethVal(Node goal, int heuristic){
+        switch (heuristic){
+            case 0:     //Euclidean distance
+                euclidean(goal);
+                break;
+            case 1:     //Manhattan
+                manhattan(goal);
+                break;
+        }
         int row1 = this.row;
         int col1 = this.col;
         int row2 = goal.getRow();
@@ -239,5 +247,29 @@ public class Node implements Comparable<Node>{
         if(this.getfVal() > n.getfVal())
             return 1;
         return 0;
+    }
+
+    private void euclidean(Node node){
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = node.getRow();
+        int col2 = node.getCol();
+
+        double aSquared = Math.pow((row1-row2), 2);
+        double bSquared = Math.pow((col1-col2), 2);
+
+        this.hVal =  (float)Math.sqrt(aSquared+bSquared);
+
+    }
+    private void manhattan(Node node){
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = node.getRow();
+        int col2 = node.getCol();
+
+        int x = Math.abs(row1-row2);
+        int y = Math.abs(col1-col2);
+
+        this.hVal = x+y;
     }
 }

@@ -5,7 +5,6 @@ import application.model.FileGenerator;
 import application.model.GraphFile;
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import application.model.Node;
@@ -55,9 +54,21 @@ public class HeuristicController {
     @FXML
     private Label statusLabel;
     @FXML
-    private TextField hField;
+    private Label nodeRow;
+    @FXML
+    private Label nodeCol;
+    @FXML
+    private Label nodeF;
+    @FXML
+    private Label nodeG;
+    @FXML
+    private Label nodeH;
+    @FXML
+    private Label elapsedTime;
     @FXML
     private TextField wField;
+    @FXML
+    private ComboBox hBox;
 
     private File[] sysFiles = null;
     private ObservableList<GraphFile> obslist;
@@ -66,11 +77,12 @@ public class HeuristicController {
 
     public void start(Stage primaryStage){
         setAlgBox();
+        setHBox();
         obslist = FXCollections.observableArrayList();
 
         loadDirectory();
 
-        //Set listener for selection changes.
+        //Set listener for file selection changes.
         fileList.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldValue, newValue) -> showFileDetails());
     }
@@ -86,6 +98,17 @@ public class HeuristicController {
                         "Sequential Heuristic A*");
 
         algsBox.setValue("Uniform-cost");
+    }
+
+    /**
+     * Helper method to load the heuristic functions Combobox.
+     */
+    private void setHBox(){
+        hBox.getItems().addAll(
+                "Euclidean distance",
+                            "Manhattan distance");
+
+        hBox.setValue("Euclidean distance");
     }
 
     /**
@@ -125,14 +148,6 @@ public class HeuristicController {
     }
 
     /**
-     * Button to delete a selected file. Added because I can.
-     */
-    @FXML
-    private void handleDelete(){
-
-    }
-
-    /**
      * Button to load the graph onto the screen.
      * Invokes the showGraph() helper method.
      */
@@ -159,6 +174,8 @@ public class HeuristicController {
         showGraph();
         String alg =algsBox.getSelectionModel().getSelectedItem().toString();
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
+        int heuristic = hBox.getSelectionModel().getSelectedIndex();
+        System.out.println(heuristic);
         Node start = gfile.graph[gfile.start[0]][gfile.start[1]];
         Node goal = gfile.graph[gfile.goal[0]][gfile.goal[1]];
 
@@ -167,34 +184,31 @@ public class HeuristicController {
 
         } else if(alg.equals("Uniform-cost")){
             System.out.println("Uniform selected");
-            algorithm = new AStar(start, goal, 0);
+            algorithm = new AStar(start, goal, 0, heuristic);
         } else if(alg.equals("A* search")){
             System.out.println("A* selected");
-            algorithm = new AStar(start, goal, 1);
+            algorithm = new AStar(start, goal, 1, heuristic);
         } else {
             System.out.println("Weighted selected");
             float weight = Float.parseFloat(wField.getText());
-            algorithm = new AStar(start, goal, weight);
+            algorithm = new AStar(start, goal, weight, heuristic);
         }
 
         if(algorithm.solve()){
-            //algorithm.setSolution();
             Node node = algorithm.getGoal();
             Node startNode = algorithm.getStart();
             System.out.println("Drawing path...");
-            drawGoal(node, startNode);
+            drawPath(node, startNode);
+            elapsedTime.setText(Long.toString(algorithm.getTime()));
             System.out.println("gVal: " + goal.getgVal());
-            //ArrayList<Node> solution = algorithm.getSolution();
-            //drawSolution(solution);
         }
     }
-    private void drawGoal(Node goal, Node start){
-        ObservableList<javafx.scene.Node> panes = graph.getChildren();
+    private void drawPath(Node goal, Node start){
         Node n = goal;
         while(n != start){
             int row = n.getRow();
             int col = n.getCol();
-            System.out.println("Node - row: " + Integer.toString(row) + " , col: " + Integer.toString(col));
+            //System.out.println("Node - row: " + Integer.toString(row) + " , col: " + Integer.toString(col));
             Pane pane = new Pane();
             pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
             pane.setStyle("-fx-background-color: blueviolet");
@@ -206,6 +220,8 @@ public class HeuristicController {
         pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
         pane.setStyle("-fx-background-color: blueviolet");
         graph.add(pane, start.getCol(), start.getRow());
+
+
     }
 
     /**
@@ -259,7 +275,6 @@ public class HeuristicController {
      * @param pane The selected UI pane in the Gridpane.
      */
     private void showNodeDetails(Pane pane){
-        /* Show the various parameters of the node at the position*/
         int row = graph.getRowIndex(pane);
         int col = graph.getColumnIndex(pane);
         System.out.println("Row: " + row + ", col: " + col);
