@@ -1,7 +1,6 @@
 package application.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Node class, the main comparison class used for the A* algorithms.
@@ -175,6 +174,18 @@ public class Node implements Comparable<Node>{
 
     public void setgVal(float value){
         this.gVal = value;
+    }
+
+    public void sethVal(Node goal){
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = goal.getRow();
+        int col2 = goal.getCol();
+
+        double aSquared = Math.pow((row1-row2), 2);
+        double bSquared = Math.pow((col1-col2), 2);
+
+        this.hVal =  (float)Math.sqrt(aSquared+bSquared);
     }
 
     public void setParent(Node parent){

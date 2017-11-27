@@ -6,15 +6,13 @@ import java.util.PriorityQueue;
 public class AStar {
     private Node start;
     private Node goal;
-    private float hVal;
     private float weight;
     private PriorityQueue<Node> fringe;
     private ArrayList<Node> closed;
 
-    public AStar(Node start, Node goal, float heuristic, float weight){
+    public AStar(Node start, Node goal, float weight){
         this.start = start;
         this.goal = goal;
-        this.hVal = heuristic;
         this.weight = weight;
     }
 
@@ -25,7 +23,8 @@ public class AStar {
         this.fringe = new PriorityQueue<>();
         this.closed = new ArrayList<>();
 
-        this.start.setfVal(this.start.getgVal() + (this.hVal * this.weight));
+        this.start.sethVal(this.goal);
+        this.start.setfVal(this.start.getgVal() + (this.start.gethVal()* this.weight));
         this.fringe.add(this.start);
 
         while(!this.fringe.isEmpty()){
@@ -55,11 +54,23 @@ public class AStar {
             child.setParent(s);
             if(this.fringe.contains(child))
                 this.fringe.remove(child);
-            child.setfVal(child.getgVal() + (this.hVal * this.weight));
+            child.sethVal(this.goal);
+            child.setfVal(child.getgVal() + (child.gethVal() * this.weight));
             this.fringe.add(child);
         }
     }
     public Node getGoal(){ return this.goal; }
     public Node getStart(){ return this.start; }
 
+    private float heuristicFunction(Node node){
+        int row1 = node.getRow();
+        int col1 = node.getCol();
+        int row2 = this.goal.getRow();
+        int col2 = this.goal.getCol();
+
+        double aSquared = Math.pow((row1-row2), 2);
+        double bSquared = Math.pow((col1-col2), 2);
+
+        return (float)Math.sqrt(aSquared+bSquared);
+    }
 }

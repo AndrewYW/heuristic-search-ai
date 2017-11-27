@@ -161,21 +161,20 @@ public class HeuristicController {
         GraphFile gfile = fileList.getSelectionModel().getSelectedItem();       //Contains the .graph field, which is the node matrix.
         Node start = gfile.graph[gfile.start[0]][gfile.start[1]];
         Node goal = gfile.graph[gfile.goal[0]][gfile.goal[1]];
-        float heuristic = Float.parseFloat(hField.getText());
 
         AStar algorithm = null;
         if(alg.equals("Sequential Heuristic A*")){
 
         } else if(alg.equals("Uniform-cost")){
             System.out.println("Uniform selected");
-            algorithm = new AStar(start, goal, heuristic, 0);
+            algorithm = new AStar(start, goal, 0);
         } else if(alg.equals("A* search")){
             System.out.println("A* selected");
-            algorithm = new AStar(start, goal, heuristic, 1);
+            algorithm = new AStar(start, goal, 1);
         } else {
             System.out.println("Weighted selected");
             float weight = Float.parseFloat(wField.getText());
-            algorithm = new AStar(start, goal, heuristic, weight);
+            algorithm = new AStar(start, goal, weight);
         }
 
         if(algorithm.solve()){
