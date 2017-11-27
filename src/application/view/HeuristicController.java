@@ -212,6 +212,7 @@ public class HeuristicController {
             Pane pane = new Pane();
             pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
             pane.setStyle("-fx-background-color: blueviolet");
+            pane.setOnMouseClicked((MouseEvent e) -> showNodeDetails(pane));
             graph.add(pane, col, row);
 
             n = n.getParent();
@@ -219,6 +220,7 @@ public class HeuristicController {
         Pane pane = new Pane();
         pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
         pane.setStyle("-fx-background-color: blueviolet");
+        pane.setOnMouseClicked((MouseEvent e) -> showNodeDetails(pane));
         graph.add(pane, start.getCol(), start.getRow());
 
 
@@ -277,7 +279,14 @@ public class HeuristicController {
     private void showNodeDetails(Pane pane){
         int row = graph.getRowIndex(pane);
         int col = graph.getColumnIndex(pane);
-        System.out.println("Row: " + row + ", col: " + col);
+        Node node = nodes[row][col];
+
+        nodeRow.setText(Integer.toString(row));
+        nodeCol.setText(Integer.toString(col));
+        nodeF.setText(Float.toString(node.getfVal()));
+        nodeG.setText(Float.toString(node.getgVal()));
+        nodeH.setText(Float.toString(node.gethVal()));
+        //System.out.println("Row: " + row + ", col: " + col);
     }
 
     /**
