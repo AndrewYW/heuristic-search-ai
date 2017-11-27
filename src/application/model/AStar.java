@@ -21,17 +21,19 @@ public class AStar {
     }
 
     public boolean solve(){
-        start.setgVal(0);
-        start.setParent(start);
+        System.out.println("Solving map...");
+        this.start.setgVal(0);
+        this.start.setParent(this.start);
         this.fringe = new PriorityQueue<>();
         this.closed = new ArrayList<>();
 
-        start.setfVal(start.getgVal() + (this.hVal * this.weight));
-        this.fringe.add(start);
+        this.start.setfVal(this.start.getgVal() + (this.hVal * this.weight));
+        this.fringe.add(this.start);
 
         while(!this.fringe.isEmpty()){
             Node s = this.fringe.poll();
             if(s == this.goal){
+                System.out.println("Solution found...");
                 return true;
             }
             this.closed.add(s);
@@ -58,6 +60,15 @@ public class AStar {
             child.setfVal(child.getgVal() + (this.hVal * this.weight));
             this.fringe.add(child);
         }
+    }
+    public Node getGoal(){ return this.goal; }
+    public void setSolution(){
+        Node node = this.goal;
+        while(node != null) {
+            this.solution.add(node);
+            node = node.getParent();
+        }
+
     }
 
     public ArrayList<Node> getSolution(){

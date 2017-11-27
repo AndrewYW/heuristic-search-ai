@@ -46,6 +46,8 @@ public class Node implements Comparable<Node>{
 
     public float gethVal() { return this.hVal; }
 
+    public Node getParent(){ return this.parent; }
+
     /**
      * Method to find the cost of travel between two nodes.
      * @TODO
@@ -55,6 +57,113 @@ public class Node implements Comparable<Node>{
     public float getCost(Node n){
         char t1 = this.type;
         char t2 = n.getType();
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = n.getRow();
+        int col2 = n.getCol();
+        boolean straight;
+
+        if(row1 == row2 || col1 == col2)
+            straight = true;
+        else
+            straight = false;
+
+        if(straight){
+            switch (t1){
+                case '1':
+                    switch (t2){
+                        case '1':
+                            return 1;
+                        case '2':
+                            return (float)1.5;
+                        case 'a':
+                            return 1;
+                        case 'b':
+                            return (float)1.5;
+                    }
+                    break;
+                case '2':
+                    switch (t2){
+                        case '1':
+                            return (float)1.5;
+                        case '2':
+                            return 2;
+                        case 'a':
+                            return (float)1.5;
+                        case 'b':
+                            return 2;
+                    }
+                    break;
+                case 'a':
+                    switch (t2){
+                        case '1':
+                            return 1;
+                        case '2':
+                            return (float)1.5;
+                        case 'a':
+                            return (float).25;
+                        case 'b':
+                            return (float).375;
+                    }
+                    break;
+                case 'b':
+                    switch (t2){
+                        case '1':
+                            return (float)1.5;
+                        case '2':
+                            return 2;
+                        case 'a':
+                            return (float).375;
+                        case 'b':
+                            return (float).25;
+                    }
+                    break;
+            }
+        } else{
+            switch(t1){
+                case '1':
+                    switch (t2){
+                        case 'a':
+                        case '1':
+                            return (float)Math.sqrt(2);
+                        case '2':
+                        case 'b':
+                            return (float)((Math.sqrt(2)+Math.sqrt(8))/2);
+                    }
+                    break;
+                case '2':
+                    switch (t2){
+                        case 'a':
+                        case '1':
+                            return (float)((Math.sqrt(2)+Math.sqrt(8))/2);
+                        case '2':
+                        case 'b':
+                            return (float)Math.sqrt(8);
+                    }
+                    break;
+                case 'a':
+                    switch (t2){
+                        case 'a':
+                        case '1':
+                            return (float)Math.sqrt(2);
+                        case '2':
+                        case 'b':
+                            return (float)((Math.sqrt(2)+Math.sqrt(8))/2);
+                    }
+                    break;
+                case 'b':
+                    switch (t2){
+                        case 'a':
+                        case '1':
+                            return (float)((Math.sqrt(2)+Math.sqrt(8))/2);
+                        case '2':
+                        case 'b':
+                            return (float)Math.sqrt(8);
+                    }
+                    break;
+            }
+        }
+
         return 0;
     }
 
@@ -72,14 +181,44 @@ public class Node implements Comparable<Node>{
         this.parent = parent;
     }
     public void setChildren(Node[][] graph){
-        for(int i = -1; i < 2; i++){
-            for(int j = -1; j < 2; j++){
-                if( (i != row) && (j != col) ){
-                    if(graph[row+i][col+j].getType() != '0')
-                        children.add(graph[row+i][col+j]);
-                }
-            }
+        if(inBounds(row+1, col+1)) {
+            if (graph[row + 1][col + 1].getType() != '0')
+                children.add(graph[row + 1][col + 1]);
         }
+        if(inBounds(row, col+1)){
+            if (graph[row][col + 1].getType() != '0')
+                children.add(graph[row][col + 1]);
+        }
+        if(inBounds(row-1, col+1)) {
+            if (graph[row - 1][col + 1].getType() != '0')
+                children.add(graph[row - 1][col + 1]);
+        }
+        if(inBounds(row+1, col)) {
+            if (graph[row + 1][col].getType() != '0')
+                children.add(graph[row + 1][col]);
+        }
+        if(inBounds(row-1, col)) {
+            if (graph[row - 1][col].getType() != '0')
+                children.add(graph[row - 1][col]);
+        }
+        if(inBounds(row+1, col-1)) {
+            if (graph[row + 1][col - 1].getType() != '0')
+                children.add(graph[row + 1][col - 1]);
+        }
+        if(inBounds(row, col-1)) {
+            if (graph[row][col - 1].getType() != '0')
+                children.add(graph[row][col - 1]);
+        }
+        if(inBounds(row-1, col-1)) {
+            if (graph[row - 1][col - 1].getType() != '0')
+                children.add(graph[row - 1][col - 1]);
+        }
+    }
+
+    private boolean inBounds(int row, int col){
+        if (row > -1 && row < 120 && col > -1 && col < 160)
+            return true;
+        return false;
     }
 
     @Override

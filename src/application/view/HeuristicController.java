@@ -5,6 +5,7 @@ import application.model.FileGenerator;
 import application.model.GraphFile;
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import application.model.Node;
@@ -161,16 +162,51 @@ public class HeuristicController {
         Node goal = gfile.graph[gfile.goal[0]][gfile.goal[1]];
         float heuristic = Float.parseFloat(hField.getText());
 
+        AStar algorithm = null;
         if(alg.equals("Sequential Heuristic A*")){
 
         } else if(alg.equals("Uniform-cost")){
-            AStar algorithm = new AStar(start, goal, heuristic, 0);
+            System.out.println("Uniform selected");
+            algorithm = new AStar(start, goal, heuristic, 0);
         } else if(alg.equals("A* search")){
-            AStar algorithm = new AStar(start, goal, heuristic, 1);
+            System.out.println("A* selected");
+            algorithm = new AStar(start, goal, heuristic, 1);
         } else {
-            wField.setEditable(true);
+            System.out.println("Weighted selected");
             float weight = Float.parseFloat(wField.getText());
-            AStar algorithm = new AStar(start, goal, heuristic, weight);
+            algorithm = new AStar(start, goal, heuristic, weight);
+        }
+
+        if(algorithm.solve()){
+            //algorithm.setSolution();
+            Node node = algorithm.getGoal();
+            System.out.println("Drawing path...");
+            drawGoal(node);
+            //ArrayList<Node> solution = algorithm.getSolution();
+            //drawSolution(solution);
+        }
+    }
+    private void drawGoal(Node goal){
+        ObservableList<javafx.scene.Node> panes = graph.getChildren();
+        Node n = goal;
+        while(n != null){
+            int row = n.getRow();
+            int col = n.getCol();
+            System.out.println("Node - row: " + Integer.toString(row) + " , col: " + Integer.toString(col));
+            /**
+            for (javafx.scene.Node pane : panes){
+                if(row == graph.getRowIndex(pane) && col == graph.getColumnIndex(pane)){
+                    Pane correctPane = (Pane) pane;
+                    correctPane.setStyle("-fx-background-color: blueviolet");
+                }
+            }
+             */
+            Pane pane = new Pane();
+            pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            pane.setStyle("-fx-background-color: blueviolet");
+            graph.add(pane, col, row);
+
+            n = n.getParent();
         }
     }
 
