@@ -187,28 +187,35 @@ public class HeuristicController {
 
         AStar algorithm = null;
         if(alg.equals("Sequential Heuristic A*")){
-
-        } else if(alg.equals("Uniform-cost")){
-            System.out.println("Uniform selected");
-            algorithm = new AStar(start, goal, 0, heuristic);
-        } else if(alg.equals("A* search")){
-            System.out.println("A* selected");
-            algorithm = new AStar(start, goal, 1, heuristic);
-        } else {
-            System.out.println("Weighted A* selected");
             float weight = Float.parseFloat(wField.getText());
             algorithm = new AStar(start, goal, weight, heuristic);
+        } else {
+            if (alg.equals("Uniform-cost")) {
+                System.out.println("Uniform selected");
+                algorithm = new AStar(start, goal, 0, heuristic);
+            } else if (alg.equals("A* search")) {
+                System.out.println("A* selected");
+                algorithm = new AStar(start, goal, 1, heuristic);
+            } else {
+                System.out.println("Weighted A* selected");
+                float weight = Float.parseFloat(wField.getText());
+                algorithm = new AStar(start, goal, weight, heuristic);
+            }
+
+            statusLabel.setText("Attempting to solve...");
+            if(algorithm.solve()){
+                statusLabel.setText("Solution found!");
+                Node node = algorithm.getGoal();
+                Node startNode = algorithm.getStart();
+                //System.out.println("Drawing path...");
+                drawPath(node, startNode);
+                elapsedTime.setText(Long.toString(algorithm.getTime()) + "ms");
+                nodeCount.setText(Integer.toString(algorithm.getFringeSize()));
+                //System.out.println("gVal: " + goal.getgVal());
+            }
         }
 
-        if(algorithm.solve()){
-            Node node = algorithm.getGoal();
-            Node startNode = algorithm.getStart();
-            System.out.println("Drawing path...");
-            drawPath(node, startNode);
-            elapsedTime.setText(Long.toString(algorithm.getTime()) + "ms");
-            nodeCount.setText(Integer.toString(algorithm.getFringeSize()));
-            System.out.println("gVal: " + goal.getgVal());
-        }
+
     }
     private void drawPath(Node goal, Node start){
         Node n = goal;

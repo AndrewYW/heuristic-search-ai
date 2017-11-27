@@ -17,6 +17,10 @@ public class Node implements Comparable<Node>{
     private char type;
     private Node parent;
     private ArrayList<Node> children;
+    public float euclidH, euclidSH, manhattanH, chebyH, octileH;  //0 1 2 3 4
+    public float euclidG, euclidSG, manhattanG, chebyG, octileG;
+    public float euclidF, euclidSF, manhattanF, chebyF, octileF;
+    public Node euclidP, euclidSP, manhattanP, chebyP, octileP;
 
 
     public Node(int row, int col, char type){
@@ -196,11 +200,11 @@ public class Node implements Comparable<Node>{
         switch (heuristic){
             case 0:     //Euclidean distance
             case 4:
-                System.out.println("Euclidean distance");
+                //System.out.println("Euclidean distance");
                 euclidean(goal, heuristic);
                 break;
             case 1:     //Manhattan
-                System.out.println("Manhattan distance");
+                //System.out.println("Manhattan distance");
                 manhattan(goal);
                 break;
             case 2:
@@ -345,4 +349,45 @@ public class Node implements Comparable<Node>{
 
         this.hVal = (float)((x+y) + ((cost - 2) * (Math.min(x,y))));
     }
+
+    public float getEuclid(Node goal, int i){
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = goal.getRow();
+        int col2 = goal.getCol();
+
+        double aSquared = Math.pow((row1-row2), 2);
+        double bSquared = Math.pow((col1-col2), 2);
+        if(i==0)
+            return (float)Math.sqrt(aSquared+bSquared);
+        else
+            return (float)(aSquared+bSquared);
+    }
+
+    public float getManhattan(Node goal){
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = goal.getRow();
+        int col2 = goal.getCol();
+
+        int x = Math.abs(row1-row2);
+        int y = Math.abs(col1-col2);
+        return (float)(x+y);
+    }
+
+    public float getDiagonal(Node goal, int i){
+        int row1 = this.row;
+        int col1 = this.col;
+        int row2 = goal.getRow();
+        int col2 = goal.getCol();
+
+        int x = Math.abs(row1-row2);
+        int y = Math.abs(col1-col2);
+
+        if(i == 3)
+            return (float)((x+y) + ((-1) * (Math.min(x,y))));
+        else
+            return (float)((x+y) + ((Math.sqrt(2) - 2) * (Math.min(x,y))));
+    }
+
 }
