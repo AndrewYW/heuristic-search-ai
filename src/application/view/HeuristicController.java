@@ -54,6 +54,8 @@ public class HeuristicController {
     @FXML
     private Label statusLabel;
     @FXML
+    private Label nodeCount;
+    @FXML
     private Label nodeRow;
     @FXML
     private Label nodeCol;
@@ -108,7 +110,8 @@ public class HeuristicController {
                 "Euclidean distance",
                             "Manhattan distance",
                             "Chebyshev distance",
-                            "Octile distance"
+                            "Octile distance",
+                            "Euclidean squared distance"
                 );
 
         hBox.setValue("Euclidean distance");
@@ -192,7 +195,7 @@ public class HeuristicController {
             System.out.println("A* selected");
             algorithm = new AStar(start, goal, 1, heuristic);
         } else {
-            System.out.println("Weighted selected");
+            System.out.println("Weighted A* selected");
             float weight = Float.parseFloat(wField.getText());
             algorithm = new AStar(start, goal, weight, heuristic);
         }
@@ -202,7 +205,8 @@ public class HeuristicController {
             Node startNode = algorithm.getStart();
             System.out.println("Drawing path...");
             drawPath(node, startNode);
-            elapsedTime.setText(Long.toString(algorithm.getTime()));
+            elapsedTime.setText(Long.toString(algorithm.getTime()) + "ms");
+            nodeCount.setText(Integer.toString(algorithm.getFringeSize()));
             System.out.println("gVal: " + goal.getgVal());
         }
     }

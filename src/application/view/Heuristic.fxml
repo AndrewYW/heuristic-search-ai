@@ -103,31 +103,34 @@
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="f(s)" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                        <Label text="h(s)" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-                        <Label fx:id="hValue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                        <Label fx:id="fValue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <Label text="g(s)" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
-                        <Label fx:id="gValue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="f(s)" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Label text="h(s)" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Label fx:id="hValue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Label fx:id="fValue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Label text="g(s)" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Label fx:id="gValue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
                         <Label text="Elapsed time:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Label text="Cell Row:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Label text="Cell Column:" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                        <Label text="Cell Row:" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label text="Cell Column:" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                         <Label fx:id="elapsedTime" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Label fx:id="nodeRow" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Label fx:id="nodeCol" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <Label fx:id="nodeF" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                        <Label fx:id="nodeH" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-                        <Label fx:id="nodeG" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Label fx:id="nodeRow" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label fx:id="nodeCol" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Label fx:id="nodeF" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Label fx:id="nodeH" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Label fx:id="nodeG" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Label text="Nodes Expanded" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label fx:id="nodeCount" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
                   <TextField layoutX="37.0" layoutY="614.0" promptText="Sequential H-value" visible="false" />
-                  <Button layoutX="29.0" layoutY="284.0" mnemonicParsing="false" onAction="#generateButton" prefHeight="27.0" prefWidth="180.0" text="Generate Maps" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+                  <Button layoutX="29.0" layoutY="284.0" mnemonicParsing="false" onAction="#generateButton" prefHeight="27.0" prefWidth="210.0" text="Generate Maps" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
                   <SplitPane dividerPositions="0.36554621848739494" layoutX="12.0" layoutY="23.0" prefHeight="26.0" prefWidth="240.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="89.0">
@@ -143,7 +146,7 @@
                     </items>
                   </SplitPane>
                   <TextField fx:id="wField" layoutX="141.0" layoutY="588.0" prefHeight="25.0" prefWidth="72.0" promptText="Weight" AnchorPane.rightAnchor="27.0" />
-                  <ComboBox fx:id="hBox" layoutX="14.0" layoutY="588.0" prefHeight="27.0" prefWidth="104.0" AnchorPane.leftAnchor="15.0" />
+                  <ComboBox fx:id="hBox" layoutX="14.0" layoutY="588.0" minWidth="170.0" prefHeight="27.0" prefWidth="104.0" AnchorPane.leftAnchor="15.0" />
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="GraphAnchor" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

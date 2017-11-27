@@ -10,6 +10,7 @@ public class AStar {
     private float weight;
     private int heuristic;
     private long time;
+    private int fringeSize;
     private PriorityQueue<Node> fringe;
     private ArrayList<Node> closed;
 
@@ -18,6 +19,7 @@ public class AStar {
         this.goal = goal;
         this.weight = weight;
         this.heuristic = hVal;
+        this.fringeSize = 0;
     }
 
     public boolean solve(){
@@ -36,9 +38,10 @@ public class AStar {
         while(!this.fringe.isEmpty()){
             Node s = this.fringe.poll();
             if(s == this.goal){
-                System.out.println("Solution found...");
                 Instant after = Instant.now();
                 this.time = Duration.between(before, after).toMillis();
+                System.out.println("Solution found...");
+                this.fringeSize = closed.size();
                 return true;
             }
             this.closed.add(s);
@@ -71,4 +74,5 @@ public class AStar {
     public Node getGoal(){ return this.goal; }
     public Node getStart(){ return this.start; }
     public long getTime(){ return this.time; }
+    public int getFringeSize(){ return this.fringeSize; }
 }

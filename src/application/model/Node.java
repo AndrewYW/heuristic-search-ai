@@ -195,8 +195,9 @@ public class Node implements Comparable<Node>{
     public void sethVal(Node goal, int heuristic){
         switch (heuristic){
             case 0:     //Euclidean distance
+            case 4:
                 System.out.println("Euclidean distance");
-                euclidean(goal);
+                euclidean(goal, heuristic);
                 break;
             case 1:     //Manhattan
                 System.out.println("Manhattan distance");
@@ -285,10 +286,11 @@ public class Node implements Comparable<Node>{
     }
 
     /**
-     * Method to implement Euclidean distance for the heuristic function.
+     * Method to implement Euclidean distance, regular and squared, for the heuristic function.
      * @param node The goal node to reach.
+     * @param d    Choice between heuristic functions: Euclidean vs Euclidean squared
      */
-    private void euclidean(Node node){
+    private void euclidean(Node node, int d){
         int row1 = this.row;
         int col1 = this.col;
         int row2 = node.getRow();
@@ -297,7 +299,10 @@ public class Node implements Comparable<Node>{
         double aSquared = Math.pow((row1-row2), 2);
         double bSquared = Math.pow((col1-col2), 2);
 
-        this.hVal =  (float)Math.sqrt(aSquared+bSquared);
+        if(d == 0)              //Euclidean normal
+            this.hVal =  (float)Math.sqrt(aSquared+bSquared);
+        else                    //Euclidean squared
+            this.hVal = (float)(aSquared+bSquared);
 
     }
 
