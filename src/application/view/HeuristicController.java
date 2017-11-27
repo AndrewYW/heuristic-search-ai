@@ -180,27 +180,21 @@ public class HeuristicController {
         if(algorithm.solve()){
             //algorithm.setSolution();
             Node node = algorithm.getGoal();
+            Node startNode = algorithm.getStart();
             System.out.println("Drawing path...");
-            drawGoal(node);
+            drawGoal(node, startNode);
+            System.out.println("gVal: " + goal.getgVal());
             //ArrayList<Node> solution = algorithm.getSolution();
             //drawSolution(solution);
         }
     }
-    private void drawGoal(Node goal){
+    private void drawGoal(Node goal, Node start){
         ObservableList<javafx.scene.Node> panes = graph.getChildren();
         Node n = goal;
-        while(n != null){
+        while(n != start){
             int row = n.getRow();
             int col = n.getCol();
             System.out.println("Node - row: " + Integer.toString(row) + " , col: " + Integer.toString(col));
-            /**
-            for (javafx.scene.Node pane : panes){
-                if(row == graph.getRowIndex(pane) && col == graph.getColumnIndex(pane)){
-                    Pane correctPane = (Pane) pane;
-                    correctPane.setStyle("-fx-background-color: blueviolet");
-                }
-            }
-             */
             Pane pane = new Pane();
             pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
             pane.setStyle("-fx-background-color: blueviolet");
@@ -208,6 +202,10 @@ public class HeuristicController {
 
             n = n.getParent();
         }
+        Pane pane = new Pane();
+        pane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        pane.setStyle("-fx-background-color: blueviolet");
+        graph.add(pane, start.getCol(), start.getRow());
     }
 
     /**

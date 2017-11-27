@@ -10,14 +10,12 @@ public class AStar {
     private float weight;
     private PriorityQueue<Node> fringe;
     private ArrayList<Node> closed;
-    private ArrayList<Node> solution;
 
     public AStar(Node start, Node goal, float heuristic, float weight){
         this.start = start;
         this.goal = goal;
         this.hVal = heuristic;
         this.weight = weight;
-        solution = new ArrayList<>();
     }
 
     public boolean solve(){
@@ -62,16 +60,6 @@ public class AStar {
         }
     }
     public Node getGoal(){ return this.goal; }
-    public void setSolution(){
-        Node node = this.goal;
-        while(node != null) {
-            this.solution.add(node);
-            node = node.getParent();
-        }
+    public Node getStart(){ return this.start; }
 
-    }
-
-    public ArrayList<Node> getSolution(){
-        return this.solution;
-    }
 }
