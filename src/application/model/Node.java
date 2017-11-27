@@ -282,11 +282,9 @@ public class Node implements Comparable<Node>{
     private void diagonal(Node node, int d){
         double cost;
         if(d == 2) {          //Chebyshev distance
-            System.out.println("Chebyshev distance");
             cost = 1;
         }
         else {                //Octile distance
-            System.out.println("Octile distance");
             cost = Math.sqrt(2);
         }
         int row1 = this.row;
